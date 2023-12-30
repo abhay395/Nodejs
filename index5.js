@@ -1,32 +1,51 @@
-const express = require("express");
-const mongoose = require('mongoose')
-const morgan = require('morgan')
-const cors = require('cors');
-const Product = require('./model/product.models.js')
-const path = require('path')
-require('dotenv').config()
-const server = express();
-server.use(cors())
-server.use(express.json());
-// const productRouter = express.Router();
-const productRouter = require("./routes/product2.js");
-const userRouter = require("./routes/user");
-server.use(express.json())
-// server.use(morgan('default'));
-server.use(express.static(path.resolve(__dirname,process.env.PUBLIC_DIR)));
-server.use("/products", productRouter.router);
-server.use("/users", userRouter.router);
-server.use('*',(req,res)=>{
-  res.sendFile(path.resolve(__dirname,'dist','index.html'))
+const http = require('http')
+const fs = require('fs')
+
+
+const index=fs.readFileSync('index.html','utf-8')
+const data=JSON.parse(fs.readFileSync('data.json','utf-8'))
+const product = data.products
+// console.log(product)
+// const data  = {age:5}; 
+const server = http.createServer((req,res)=>{
+    console.log('server started')
+    // console.log(req.url)
+
+
+    if(req.url.startsWith('/product')){
+        const id=req.url.split('/')[2]
+        console.log(id)
+        const prd= product.find(p=>p.id===(+id))
+        console.log(prd)
+
+        res.setHeader('Content-Type','text/html')
+        const modifyindex = index.replace('**title**',prd.title).replace('**image**',prd.thumbnail).replace('**Price**',prd.price).replace('**Description**',prd.description)
+        res.end(modifyindex);
+        return;
+        
+    }
+    switch(req.url){
+        case '/':
+            res.setHeader('Content-Type','text/html')
+            res.end(index);
+            break;
+        case '/api':
+            res.setHeader('Content-Type','application/json')
+            res.end(JSON.stringify(data))
+            break;
+        case '/product' :
+                res.setHeader('Content-Type','text/html')
+                const modifyindex = index.replace('**title**',product.title).replace('**image**',product.thumbnail).replace('**Price**',product.price).replace('**Description**',product.description)
+                res.end(modifyindex);
+                break;
+        default:
+                    res.writeHead(404,'NOT Found')
+                    res.end()
+    }
+
+    // res.end(JSON.stringify(data))
+   
+
 })
 
-// db connection
-main().catch(err => console.log(err));
-
-async function main() {
-  await mongoose.connect(process.env.MONGODB_URL);
-    console.log('database connected')
-}
-server.listen(process.env.PORT, () => {
-  console.log("server started");
-});
+server.listen(8080)
