@@ -2,8 +2,8 @@ const http = require('http')
 const fs = require('fs')
 
 
-const index=fs.readFileSync('index.html','utf-8')
-const data=JSON.parse(fs.readFileSync('data.json','utf-8'))
+const index=fs.Sync('index.html','utf-8')
+const data=JSON.parse(fs.Sync('data.json','utf-8'))
 const product = data.products
 // console.log(product)
 // const data  = {age:5}; 

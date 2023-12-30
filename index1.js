@@ -4,8 +4,8 @@ const express= require('express');
 const morgan = require('morgan')
 const server = express();
 
-const index = fs.readFileSync('index.html','utf-8');
-const data = JSON.parse(fs.readFileSync('data.json','utf-8'));
+const index = fs.Sync('index.html','utf-8');
+const data = JSON.parse(fs.Sync('data.json','utf-8'));
 const product = data.products;
 
 
