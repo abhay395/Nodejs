@@ -10,7 +10,7 @@ server.use(cors())
 server.use(express.json());
 // const productRouter = express.Router();
 const productRouter = require("./routes/product2.js");
-const Router = require("./routes/.js");
+// const Router = require("./routes/.js");
 server.use(express.json())
 // server.use(morgan('default'));
 server.use(express.static(path.resolve(__dirname,process.env.PUBLIC_DIR)));
