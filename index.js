@@ -10,12 +10,12 @@ server.use(cors())
 server.use(express.json());
 // const productRouter = express.Router();
 const productRouter = require("./routes/product2.js");
-const userRouter = require("./routes/user.js");
+const Router = require("./routes/.js");
 server.use(express.json())
 // server.use(morgan('default'));
 server.use(express.static(path.resolve(__dirname,process.env.PUBLIC_DIR)));
 server.use("/products", productRouter.router);
-server.use("/users", userRouter.router);
+// server.use("/s", Router.router);
 server.use('*',(req,res)=>{
   res.sendFile(path.resolve(__dirname,'dist','index.html'))
 })
