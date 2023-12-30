@@ -13,7 +13,7 @@ const productRouter = require("./routes/product2.js");
 const userRouter = require("./routes/user");
 server.use(express.json())
 // server.use(morgan('default'));
-server.use(express.static(process.env.PUBLIC_DIR));
+server.use(express.static(path.resolve(__dirname,process.env.PUBLIC_DIR)));
 server.use("/products", productRouter.router);
 server.use("/users", userRouter.router);
 server.use('*',(req,res)=>{
@@ -24,7 +24,7 @@ server.use('*',(req,res)=>{
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/eccommerce');
+  await mongoose.connect(process.env.MONGODB_URL);
     console.log('database connected')
 }
 server.listen(process.env.PORT, () => {
